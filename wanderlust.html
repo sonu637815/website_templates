@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wanderlust – Travel Agency</title>
+<link href="style.css" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --primary: #1a6b4a;
+    --primary-dark: #134f37;
+    --accent: #f4a832;
+    --text: #1c1c1e;
+    --muted: #6b7280;
+    --light: #f8f6f1;
+    --white: #ffffff;
+    --card-bg: #ffffff;
+    --border: #e5e0d8;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Inter', sans-serif; color: var(--text); background: var(--white); }
+  h1,h2,h3,h4 { font-family: 'Playfair Display', serif; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 6%; height: 72px;
+    background: rgba(255,255,255,0.95); backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700; color: var(--primary); text-decoration: none; letter-spacing: -0.5px; }
+  .logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { text-decoration: none; color: var(--text); font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--primary); }
+  .nav-cta { background: var(--primary); color: #fff; border: none; padding: 0.55rem 1.4rem; border-radius: 50px; font-size: 0.88rem; font-weight: 500; cursor: pointer; transition: background 0.2s; }
+  .nav-cta:hover { background: var(--primary-dark); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0f3d28 0%, #1a6b4a 50%, #2d8f64 100%);
+    display: flex; align-items: center; padding: 100px 6% 60px;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&q=80') center/cover no-repeat;
+    opacity: 0.35;
+  }
+  .hero-content { position: relative; max-width: 640px; }
+  .hero-badge { display: inline-block; background: var(--accent); color: #fff; font-size: 0.78rem; font-weight: 600; padding: 0.3rem 0.9rem; border-radius: 50px; margin-bottom: 1.2rem; letter-spacing: 0.5px; text-transform: uppercase; }
+  .hero h1 { font-size: clamp(2.8rem, 6vw, 5rem); color: #fff; line-height: 1.1; margin-bottom: 1.2rem; }
+  .hero p { font-size: 1.1rem; color: rgba(255,255,255,0.8); line-height: 1.7; margin-bottom: 2rem; max-width: 500px; }
+  .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary { background: var(--accent); color: #fff; padding: 0.85rem 2rem; border-radius: 50px; text-decoration: none; font-weight: 600; font-size: 0.95rem; transition: transform 0.2s, box-shadow 0.2s; }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(244,168,50,0.4); }
+  .btn-outline { background: transparent; color: #fff; padding: 0.85rem 2rem; border-radius: 50px; text-decoration: none; font-weight: 500; font-size: 0.95rem; border: 1.5px solid rgba(255,255,255,0.5); transition: background 0.2s; }
+  .btn-outline:hover { background: rgba(255,255,255,0.1); }
+
+  /* SEARCH BAR */
+  .search-bar {
+    position: relative; margin-top: 3rem;
+    background: rgba(255,255,255,0.12); backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.25); border-radius: 16px;
+    padding: 1.2rem 1.4rem; display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;
+    max-width: 600px;
+  }
+  .search-field { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 120px; }
+  .search-field label { font-size: 0.72rem; color: rgba(255,255,255,0.65); text-transform: uppercase; letter-spacing: 0.6px; }
+  .search-field input, .search-field select {
+    background: transparent; border: none; outline: none;
+    color: #fff; font-size: 0.92rem; font-weight: 500;
+  }
+  .search-field select option { color: var(--text); background: #fff; }
+  .search-divider { width: 1px; height: 36px; background: rgba(255,255,255,0.25); }
+  .search-btn { background: var(--accent); border: none; color: #fff; padding: 0.7rem 1.4rem; border-radius: 10px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+  .search-btn:hover { background: #e09620; }
+
+  /* STATS */
+  .stats-bar {
+    background: var(--primary-dark); color: #fff;
+    display: flex; justify-content: space-around; flex-wrap: wrap;
+    padding: 2.5rem 6%;
+  }
+  .stat { text-align: center; padding: 0.5rem 1rem; }
+  .stat-num { font-family: 'Playfair Display', serif; font-size: 2.4rem; font-weight: 700; color: var(--accent); }
+  .stat-label { font-size: 0.82rem; color: rgba(255,255,255,0.65); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  /* SECTIONS */
+  section { padding: 80px 6%; }
+  .section-tag { display: inline-block; font-size: 0.78rem; font-weight: 600; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.6rem; }
+  .section-title { font-size: clamp(1.8rem, 3.5vw, 2.8rem); color: var(--text); margin-bottom: 1rem; }
+  .section-sub { color: var(--muted); font-size: 1rem; line-height: 1.7; max-width: 520px; }
+  .section-header { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem; margin-bottom: 3rem; }
+  .view-all { color: var(--primary); font-weight: 500; text-decoration: none; font-size: 0.9rem; border-bottom: 1px solid var(--primary); padding-bottom: 2px; }
+
+  /* DESTINATION CARDS */
+  .destinations { background: var(--light); }
+  .dest-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+  .dest-card {
+    border-radius: 16px; overflow: hidden; background: var(--card-bg);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06); transition: transform 0.25s, box-shadow 0.25s; cursor: pointer;
+  }
+  .dest-card:hover { transform: translateY(-6px); box-shadow: 0 12px 32px rgba(0,0,0,0.12); }
+  .dest-img { width: 100%; height: 200px; object-fit: cover; display: block; }
+  .dest-img-placeholder {
+    width: 100%; height: 200px; display: flex; align-items: center; justify-content: center;
+    font-size: 4rem; position: relative;
+  }
+  .dest-badge {
+    position: absolute; top: 14px; left: 14px;
+    background: var(--white); color: var(--primary); font-size: 0.72rem; font-weight: 600;
+    padding: 4px 10px; border-radius: 50px;
+  }
+  .dest-body { padding: 1.2rem; }
+  .dest-body h3 { font-size: 1.15rem; margin-bottom: 0.3rem; }
+  .dest-meta { display: flex; justify-content: space-between; align-items: center; margin-top: 0.8rem; }
+  .dest-price { font-weight: 700; color: var(--primary); font-size: 1.05rem; }
+  .dest-price span { font-size: 0.78rem; color: var(--muted); font-weight: 400; }
+  .dest-rating { display: flex; align-items: center; gap: 4px; font-size: 0.82rem; color: var(--muted); }
+  .stars { color: var(--accent); letter-spacing: 1px; font-size: 0.78rem; }
+  .dest-loc { font-size: 0.82rem; color: var(--muted); display: flex; align-items: center; gap: 4px; }
+
+  /* TOURS SECTION */
+  .tours-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem; }
+  .tour-card {
+    border: 1px solid var(--border); border-radius: 16px; overflow: hidden;
+    transition: transform 0.25s; background: var(--card-bg);
+  }
+  .tour-card:hover { transform: translateY(-4px); }
+  .tour-img-wrap { position: relative; }
+  .tour-img-ph {
+    width: 100%; height: 220px; display: flex; align-items: center; justify-content: center;
+    font-size: 4.5rem; position: relative;
+  }
+  .tour-duration {
+    position: absolute; bottom: 14px; right: 14px;
+    background: rgba(0,0,0,0.65); color: #fff; font-size: 0.78rem;
+    padding: 4px 10px; border-radius: 50px; backdrop-filter: blur(4px);
+  }
+  .tour-body { padding: 1.4rem; }
+  .tour-body h3 { font-size: 1.2rem; margin-bottom: 0.5rem; }
+  .tour-body p { font-size: 0.88rem; color: var(--muted); line-height: 1.6; margin-bottom: 1rem; }
+  .tour-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 1rem; border-top: 1px solid var(--border); }
+  .tour-price { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--primary); font-weight: 700; }
+  .tour-price small { font-family: 'Inter', sans-serif; font-size: 0.75rem; color: var(--muted); font-weight: 400; }
+  .book-btn { background: var(--primary); color: #fff; border: none; padding: 0.6rem 1.2rem; border-radius: 50px; font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: background 0.2s; }
+  .book-btn:hover { background: var(--primary-dark); }
+
+  /* WHY US */
+  .why { background: var(--light); }
+  .why-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 2rem; }
+  .why-card { text-align: center; padding: 2rem 1.5rem; background: var(--white); border-radius: 16px; border: 1px solid var(--border); }
+  .why-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+  .why-card h4 { font-size: 1.05rem; margin-bottom: 0.6rem; }
+  .why-card p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+
+  /* REVIEWS */
+  .reviews-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+  .review-card { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 1.6rem; }
+  .review-stars { color: var(--accent); font-size: 0.9rem; letter-spacing: 2px; margin-bottom: 0.8rem; }
+  .review-text { font-size: 0.9rem; color: var(--text); line-height: 1.7; margin-bottom: 1.2rem; font-style: italic; }
+  .reviewer { display: flex; align-items: center; gap: 10px; }
+  .avatar { width: 40px; height: 40px; border-radius: 50%; font-size: 1rem; display: flex; align-items: center; justify-content: center; font-weight: 600; color: #fff; flex-shrink: 0; }
+  .reviewer-name { font-weight: 600; font-size: 0.88rem; }
+  .reviewer-trip { font-size: 0.78rem; color: var(--muted); }
+
+  /* CTA BANNER */
+  .cta-banner {
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+    color: #fff; text-align: center; padding: 80px 6%;
+    position: relative; overflow: hidden;
+  }
+  .cta-banner::before {
+    content: ''; position: absolute; inset: 0;
+    background: url('https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1200&q=70') center/cover;
+    opacity: 0.15;
+  }
+  .cta-banner > * { position: relative; }
+  .cta-banner h2 { font-size: clamp(2rem, 4vw, 3.2rem); margin-bottom: 1rem; }
+  .cta-banner p { font-size: 1.05rem; color: rgba(255,255,255,0.8); margin-bottom: 2rem; max-width: 540px; margin-left: auto; margin-right: auto; }
+
+  /* TIPS */
+  .tips-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem; }
+  .tip-card { display: flex; gap: 1.2rem; padding: 1.4rem; border: 1px solid var(--border); border-radius: 14px; background: var(--card-bg); transition: box-shadow 0.2s; }
+  .tip-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.07); }
+  .tip-num { font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 700; color: var(--accent); opacity: 0.5; flex-shrink: 0; line-height: 1; }
+  .tip-card h4 { font-size: 1rem; margin-bottom: 0.4rem; }
+  .tip-card p { font-size: 0.83rem; color: var(--muted); line-height: 1.6; }
+
+  /* GALLERY */
+  .gallery { background: var(--light); }
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: auto auto;
+    gap: 1rem;
+  }
+  .g-item {
+    border-radius: 12px; overflow: hidden; font-size: 3rem;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--border); cursor: pointer; transition: transform 0.25s;
+    min-height: 160px;
+  }
+  .g-item:hover { transform: scale(1.02); }
+  .g-item:nth-child(1) { grid-column: span 2; grid-row: span 2; min-height: 340px; font-size: 5rem; }
+
+  /* NEWSLETTER */
+  .newsletter { text-align: center; padding: 80px 6%; }
+  .newsletter-box { max-width: 560px; margin: 0 auto; }
+  .newsletter h2 { margin-bottom: 0.8rem; }
+  .newsletter p { color: var(--muted); margin-bottom: 2rem; }
+  .nl-form { display: flex; gap: 0.8rem; flex-wrap: wrap; justify-content: center; }
+  .nl-input { flex: 1; min-width: 220px; padding: 0.75rem 1.2rem; border: 1.5px solid var(--border); border-radius: 50px; font-size: 0.9rem; outline: none; transition: border-color 0.2s; }
+  .nl-input:focus { border-color: var(--primary); }
+  .nl-btn { background: var(--primary); color: #fff; border: none; padding: 0.75rem 1.8rem; border-radius: 50px; font-weight: 600; cursor: pointer; font-size: 0.9rem; transition: background 0.2s; }
+  .nl-btn:hover { background: var(--primary-dark); }
+
+  /* FOOTER */
+  footer { background: #0f2a1c; color: rgba(255,255,255,0.75); padding: 60px 6% 30px; }
+  .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem; }
+  .footer-brand .logo { font-size: 1.4rem; display: block; margin-bottom: 1rem; }
+  .footer-brand p { font-size: 0.85rem; line-height: 1.7; max-width: 260px; }
+  footer h5 { font-family: 'Inter', sans-serif; font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: rgba(255,255,255,0.4); margin-bottom: 1rem; }
+  footer ul { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+  footer ul a { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.88rem; transition: color 0.2s; }
+  footer ul a:hover { color: var(--accent); }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; font-size: 0.8rem; color: rgba(255,255,255,0.4); }
+  .socials { display: flex; gap: 0.8rem; }
+  .social-icon { width: 34px; height: 34px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center; font-size: 0.85rem; color: rgba(255,255,255,0.6); text-decoration: none; transition: border-color 0.2s, color 0.2s; }
+  .social-icon:hover { border-color: var(--accent); color: var(--accent); }
+
+  @media (max-width: 768px) {
+    .nav-links, .nav-cta { display: none; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+    .g-item:nth-child(1) { grid-column: span 2; min-height: 220px; }
+    .stats-bar { gap: 1.5rem; }
+    .search-bar { flex-direction: column; }
+    .search-divider { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="logo" href="#">Wander<span>lust</span></a>
+  <ul class="nav-links">
+    <li><a href="#">Home</a></li>
+    <li><a href="#">Destinations</a></li>
+    <li><a href="#">Tours</a></li>
+    <li><a href="#">About</a></li>
+    <li><a href="#">Blog</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+  <button class="nav-cta">Book a Trip</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <span class="hero-badge">✈ Explore the World</span>
+    <h1>Discover Your Next Adventure</h1>
+    <p>Handcrafted journeys to the world's most breathtaking destinations. Expert guides, curated experiences, and memories that last a lifetime.</p>
+    <div class="hero-btns">
+      <a href="#tours" class="btn-primary">Explore Tours</a>
+      <a href="#destinations" class="btn-outline">View Destinations</a>
+    </div>
+    <div class="search-bar">
+      <div class="search-field">
+        <label>Destination</label>
+        <select>
+          <option>Bali, Indonesia</option>
+          <option>Santorini, Greece</option>
+          <option>Kyoto, Japan</option>
+          <option>Patagonia, Chile</option>
+          <option>Machu Picchu, Peru</option>
+        </select>
+      </div>
+      <div class="search-divider"></div>
+      <div class="search-field">
+        <label>Departure</label>
+        <input type="date" value="2026-05-15">
+      </div>
+      <div class="search-divider"></div>
+      <div class="search-field">
+        <label>Travelers</label>
+        <select>
+          <option>1 Person</option>
+          <option>2 People</option>
+          <option>3–5 People</option>
+          <option>6+ People</option>
+        </select>
+      </div>
+      <button class="search-btn">Search</button>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat"><div class="stat-num">12K+</div><div class="stat-label">Happy Travelers</div></div>
+  <div class="stat"><div class="stat-num">85+</div><div class="stat-label">Destinations</div></div>
+  <div class="stat"><div class="stat-num">250+</div><div class="stat-label">Tour Packages</div></div>
+  <div class="stat"><div class="stat-num">98%</div><div class="stat-label">Satisfaction Rate</div></div>
+</div>
+
+<!-- DESTINATIONS -->
+<section class="destinations" id="destinations">
+  <div class="section-header">
+    <div>
+      <span class="section-tag">Popular Destinations</span>
+      <h2 class="section-title">Where Do You Want to Go?</h2>
+      <p class="section-sub">From tropical paradises to ancient ruins, explore our most beloved destinations around the world.</p>
+    </div>
+    <a href="#" class="view-all">View all destinations →</a>
+  </div>
+  <div class="dest-grid">
+
+    <div class="dest-card">
+      <div class="dest-img-placeholder" style="background: linear-gradient(135deg,#4ecdc4,#1a535c);">
+        🌴<span class="dest-badge">Bestseller</span>
+      </div>
+      <div class="dest-body">
+        <div class="dest-loc">📍 Bali, Indonesia</div>
+        <h3>Bali Spiritual Retreat</h3>
+        <div class="dest-meta">
+          <div class="dest-price">$1,299 <span>/ person</span></div>
+          <div class="dest-rating"><span class="stars">★★★★★</span> 4.9 (128)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dest-card">
+      <div class="dest-img-placeholder" style="background: linear-gradient(135deg,#f7971e,#ffd200);">
+        🏛️<span class="dest-badge">Top Rated</span>
+      </div>
+      <div class="dest-body">
+        <div class="dest-loc">📍 Santorini, Greece</div>
+        <h3>Greek Island Hopping</h3>
+        <div class="dest-meta">
+          <div class="dest-price">$2,149 <span>/ person</span></div>
+          <div class="dest-rating"><span class="stars">★★★★★</span> 4.8 (94)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dest-card">
+      <div class="dest-img-placeholder" style="background: linear-gradient(135deg,#c94b4b,#4b134f);">
+        ⛩️<span class="dest-badge">Cultural</span>
+      </div>
+      <div class="dest-body">
+        <div class="dest-loc">📍 Kyoto, Japan</div>
+        <h3>Japan Cherry Blossom</h3>
+        <div class="dest-meta">
+          <div class="dest-price">$2,899 <span>/ person</span></div>
+          <div class="dest-rating"><span class="stars">★★★★★</span> 5.0 (67)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dest-card">
+      <div class="dest-img-placeholder" style="background: linear-gradient(135deg,#2193b0,#6dd5ed);">
+        🏔️<span class="dest-badge">Adventure</span>
+      </div>
+      <div class="dest-body">
+        <div class="dest-loc">📍 Patagonia, Chile</div>
+        <h3>Patagonia Trek</h3>
+        <div class="dest-meta">
+          <div class="dest-price">$3,499 <span>/ person</span></div>
+          <div class="dest-rating"><span class="stars">★★★★☆</span> 4.7 (41)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dest-card">
+      <div class="dest-img-placeholder" style="background: linear-gradient(135deg,#56ab2f,#a8e063);">
+        🌿<span class="dest-badge">Eco Tour</span>
+      </div>
+      <div class="dest-body">
+        <div class="dest-loc">📍 Costa Rica</div>
+        <h3>Rainforest & Wildlife</h3>
+        <div class="dest-meta">
+          <div class="dest-price">$1,799 <span>/ person</span></div>
+          <div class="dest-rating"><span class="stars">★★★★★</span> 4.9 (83)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dest-card">
+      <div class="dest-img-placeholder" style="background: linear-gradient(135deg,#8360c3,#2ebf91);">
+        🏺<span class="dest-badge">Historical</span>
+      </div>
+      <div class="dest-body">
+        <div class="dest-loc">📍 Machu Picchu, Peru</div>
+        <h3>Inca Trail Explorer</h3>
+        <div class="dest-meta">
+          <div class="dest-price">$2,299 <span>/ person</span></div>
+          <div class="dest-rating"><span class="stars">★★★★★</span> 4.8 (115)</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- TOURS -->
+<section id="tours">
+  <div class="section-header">
+    <div>
+      <span class="section-tag">Featured Tours</span>
+      <h2 class="section-title">Curated Tour Packages</h2>
+      <p class="section-sub">Carefully crafted itineraries with expert local guides, premium accommodation, and unforgettable experiences.</p>
+    </div>
+    <a href="#" class="view-all">All packages →</a>
+  </div>
+  <div class="tours-grid">
+
+    <div class="tour-card">
+      <div class="tour-img-wrap">
+        <div class="tour-img-ph" style="background: linear-gradient(160deg,#0f3d28,#1a6b4a);">🌊</div>
+        <span class="tour-duration">⏱ 10 Days</span>
+      </div>
+      <div class="tour-body">
+        <h3>Ultimate Bali Experience</h3>
+        <p>Rice terraces, temples, surf lessons, spa treatments and a cooking class in Ubud. The perfect blend of culture and relaxation.</p>
+        <div style="display:flex;gap:0.6rem;flex-wrap:wrap;margin-bottom:0.5rem;">
+          <span style="background:#f0faf5;color:var(--primary);font-size:0.75rem;padding:3px 10px;border-radius:50px;font-weight:500;">Hotel Included</span>
+          <span style="background:#f0faf5;color:var(--primary);font-size:0.75rem;padding:3px 10px;border-radius:50px;font-weight:500;">Transfers</span>
+          <span style="background:#f0faf5;color:var(--primary);font-size:0.75rem;padding:3px 10px;border-radius:50px;font-weight:500;">Guide</span>
+        </div>
+        <div class="tour-footer">
+          <div class="tour-price">$1,299 <small>/ person</small></div>
+          <button class="book-btn">Book Now</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="tour-card">
+      <div class="tour-img-wrap">
+        <div class="tour-img-ph" style="background: linear-gradient(160deg,#1a1a2e,#16213e);">🌃</div>
+        <span class="tour-duration">⏱ 14 Days</span>
+      </div>
+      <div class="tour-body">
+        <h3>Japan in Full Bloom</h3>
+        <p>Tokyo's neon streets to Kyoto's silent shrines. Witness the cherry blossoms, taste authentic ramen, and stay in a traditional ryokan.</p>
+        <div style="display:flex;gap:0.6rem;flex-wrap:wrap;margin-bottom:0.5rem;">
+          <span style="background:#f0faf5;color:var(--primary);font-size:0.75rem;padding:3px 10px;border-radius:50px;font-weight:500;">Flights</span>
+          <span style="background:#f0faf5;color:var(--primary);font-size:0.75rem;padding:3px 10px;border-radius:50px;font-weight:500;">Meals</span>
+          <span style="background:#f0faf5;color:var(--primary);font-size:0.75rem;padding:3px 10px;border-radius:50px;font-weight:500;">Guide</span>
+        </div>
+        <div class="tour-footer">
+          <div class="tour-price">$2,899 <small>/ person</small></div>
+          <button class="book-btn">Book Now</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="tour-card">
+      <div class="tour-img-wrap">
+        <div class="tour-img-ph" style="background: linear-gradient(160deg,#c94b4b,#a14040);">🦁</div>
+        <span class="tour-duration">⏱ 8 Days</span>
+      </div>
+      <div class="tour-body">
+        <h3>African Safari & Beach</h3>
+        <p>Witness the Great Migration in the Serengeti, then unwind on the pristine shores of Zanzibar. A once-in-a-lifetime combo.</p>
+        <div style="display:flex;gap:0.6rem;flex-wrap:wrap;margin-bottom:0.5rem;">
+          <span style="background:#f0faf5;color:var(--primary);font-size:0.75rem;padding:3px 10px;border-radius:50px;font-weight:500;">Safari Camp</span>
+          <span style="background:#f0faf5;color:var(--primary);font-size:0.75rem;padding:3px 10px;border-radius:50px;font-weight:500;">All Meals</span>
+          <span style="background:#f0faf5;color:var(--primary);font-size:0.75rem;padding:3px 10px;border-radius:50px;font-weight:500;">Expert Guide</span>
+        </div>
+        <div class="tour-footer">
+          <div class="tour-price">$3,799 <small>/ person</small></div>
+          <button class="book-btn">Book Now</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- WHY US -->
+<section class="why">
+  <div style="text-align:center;margin-bottom:3rem;">
+    <span class="section-tag">Why Wanderlust</span>
+    <h2 class="section-title">Travel With Confidence</h2>
+    <p class="section-sub" style="margin:0 auto;">We handle every detail so you can focus on the experience. Here's what sets us apart.</p>
+  </div>
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="why-icon">🗺️</div>
+      <h4>Expert Local Guides</h4>
+      <p>Knowledgeable guides with deep local roots who bring destinations to life beyond the guidebook.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">🛡️</div>
+      <h4>Safe & Insured Travel</h4>
+      <p>Comprehensive travel insurance and 24/7 on-the-ground support for complete peace of mind.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">💎</div>
+      <h4>Handpicked Stays</h4>
+      <p>From boutique eco-lodges to luxury resorts, every property is personally vetted by our team.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">♻️</div>
+      <h4>Responsible Tourism</h4>
+      <p>We offset carbon for every trip and partner with local communities to make travel a force for good.</p>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section>
+  <div class="section-header">
+    <div>
+      <span class="section-tag">Traveler Stories</span>
+      <h2 class="section-title">What Our Travelers Say</h2>
+    </div>
+    <a href="#" class="view-all">Read all reviews →</a>
+  </div>
+  <div class="reviews-grid">
+
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">"Bali was an absolute dream. Our guide Wayan knew every hidden waterfall and warung. Wanderlust turned our honeymoon into something truly magical."</p>
+      <div class="reviewer">
+        <div class="avatar" style="background:#1a6b4a;">SA</div>
+        <div>
+          <div class="reviewer-name">Sophie & Aiden</div>
+          <div class="reviewer-trip">Bali Retreat · March 2026</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">"Japan in cherry blossom season was even more beautiful than the photos. The ryokan stay and tea ceremony were highlights I'll remember forever."</p>
+      <div class="reviewer">
+        <div class="avatar" style="background:#c94b4b;">MK</div>
+        <div>
+          <div class="reviewer-name">Marcus Kim</div>
+          <div class="reviewer-trip">Japan Tour · April 2026</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">"The Patagonia trek was gruelling in the best possible way. Waking up to the Torres del Paine at sunrise — words don't do it justice."</p>
+      <div class="reviewer">
+        <div class="avatar" style="background:#2193b0;">LR</div>
+        <div>
+          <div class="reviewer-name">Laura Rodriguez</div>
+          <div class="reviewer-trip">Patagonia Trek · Feb 2026</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<div class="cta-banner">
+  <span class="hero-badge">Limited Spots Available</span>
+  <h2>Ready for Your Next Adventure?</h2>
+  <p>Join thousands of happy travelers. Book your dream journey today and receive a free packing guide and travel insurance.</p>
+  <a href="#" class="btn-primary" style="display:inline-block;">Start Planning Now →</a>
+</div>
+
+<!-- TRAVEL TIPS -->
+<section>
+  <div class="section-header">
+    <div>
+      <span class="section-tag">Travel Tips</span>
+      <h2 class="section-title">Packing & Travel Guides</h2>
+      <p class="section-sub">Expert advice to make every journey smoother, safer, and more memorable.</p>
+    </div>
+  </div>
+  <div class="tips-grid">
+    <div class="tip-card">
+      <div class="tip-num">01</div>
+      <div>
+        <h4>Pack Light, Travel Far</h4>
+        <p>Stick to a carry-on — 10 essential items cover 90% of any trip. Roll don't fold, and always bring a universal adapter.</p>
+      </div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-num">02</div>
+      <div>
+        <h4>Health & Vaccinations</h4>
+        <p>Check CDC recommendations 6–8 weeks before departure. Carry a basic kit with rehydration salts and any prescriptions.</p>
+      </div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-num">03</div>
+      <div>
+        <h4>Digital Backup Everything</h4>
+        <p>Scan your passport, insurance, and bookings. Save to Google Drive or email yourself — losing docs abroad is avoidable.</p>
+      </div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-num">04</div>
+      <div>
+        <h4>Local Currency & ATMs</h4>
+        <p>Withdraw cash at airport ATMs on arrival. Notify your bank before travel and always keep a backup emergency card.</p>
+      </div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-num">05</div>
+      <div>
+        <h4>Respect Local Culture</h4>
+        <p>Learn a few phrases, dress modestly at religious sites, and ask before photographing people. Thoughtfulness opens doors.</p>
+      </div>
+    </div>
+    <div class="tip-card">
+      <div class="tip-num">06</div>
+      <div>
+        <h4>Travel Insurance Is Non-Negotiable</h4>
+        <p>A single hospital visit abroad can cost tens of thousands. Always insure for medical evacuation and trip cancellation.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery">
+  <div style="text-align:center;margin-bottom:2.5rem;">
+    <span class="section-tag">Photo Gallery</span>
+    <h2 class="section-title">Real Trips, Real Moments</h2>
+  </div>
+  <div class="gallery-grid">
+    <div class="g-item" style="background:linear-gradient(135deg,#0f3d28,#1a6b4a);">🌋</div>
+    <div class="g-item" style="background:linear-gradient(135deg,#4ecdc4,#1a535c);">🌊</div>
+    <div class="g-item" style="background:linear-gradient(135deg,#f7971e,#ffd200);">🏜️</div>
+    <div class="g-item" style="background:linear-gradient(135deg,#c94b4b,#a14040);">🦁</div>
+    <div class="g-item" style="background:linear-gradient(135deg,#8360c3,#2ebf91);">⛰️</div>
+    <div class="g-item" style="background:linear-gradient(135deg,#56ab2f,#a8e063);">🌿</div>
+    <div class="g-item" style="background:linear-gradient(135deg,#2193b0,#6dd5ed);">🐋</div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="newsletter">
+  <div class="newsletter-box">
+    <span class="section-tag">Stay Inspired</span>
+    <h2 class="section-title">Get Travel Ideas in Your Inbox</h2>
+    <p>Weekly destination guides, early-bird deals, and packing tips — join 40,000+ subscribers.</p>
+    <div class="nl-form">
+      <input type="email" class="nl-input" placeholder="your@email.com">
+      <button class="nl-btn">Subscribe</button>
+    </div>
+    <p style="font-size:0.75rem;color:var(--muted);margin-top:1rem;">No spam. Unsubscribe anytime. Read our privacy policy.</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a class="logo" href="#">Wander<span>lust</span></a>
+      <p>We craft unforgettable journeys to the world's most extraordinary places. Travel that transforms.</p>
+      <div class="socials" style="margin-top:1.2rem;">
+        <a class="social-icon" href="#">𝕏</a>
+        <a class="social-icon" href="#">f</a>
+        <a class="social-icon" href="#">📷</a>
+        <a class="social-icon" href="#">in</a>
+      </div>
+    </div>
+    <div>
+      <h5>Destinations</h5>
+      <ul>
+        <li><a href="#">Bali, Indonesia</a></li>
+        <li><a href="#">Santorini, Greece</a></li>
+        <li><a href="#">Kyoto, Japan</a></li>
+        <li><a href="#">Patagonia</a></li>
+        <li><a href="#">Costa Rica</a></li>
+        <li><a href="#">Morocco</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Company</h5>
+      <ul>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Our Guides</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Press</a></li>
+        <li><a href="#">Sustainability</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Support</h5>
+      <ul>
+        <li><a href="#">Help Center</a></li>
+        <li><a href="#">Booking Policy</a></li>
+        <li><a href="#">Cancellations</a></li>
+        <li><a href="#">Travel Insurance</a></li>
+        <li><a href="#">Contact Us</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Wanderlust Travel Agency. All rights reserved.</span>
+    <span>Privacy Policy · Terms of Service · Cookie Policy</span>
+  </div>
+</footer>
+
+</body>
+</html>
